@@ -1,5 +1,4 @@
 {
-  "level": 2,
   "rules": [
     { "from": "assassinato", "to": "crime com vítima fatal" },
     { "from": "ataque terrorista", "to": "incidente violento" }

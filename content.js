@@ -54,23 +54,41 @@ async function loadRules() {
   replaceRules = [];
   blockRules = [];
 
-  const files = LEVEL_FILES[ACTIVE_LEVEL] || [];
+  const levelsToLoad = {
+    lvl1: ["lvl1"],
+    lvl2: ["lvl1", "lvl2"],
+    lvl3: ["lvl1", "lvl2", "lvl3"],
+    buddha: ["lvl1", "lvl2", "lvl3", "buddha"]
+  }[ACTIVE_LEVEL] || ["lvl1"];
 
-  for (const file of files) {
-    try {
-      const res = await fetch(BASE_RULES_URL + file);
-      const json = await res.json();
+  const languages = getLanguageFallbacks();
 
-      if (Array.isArray(json.rules)) {
-        replaceRules.push(...json.rules);
-      }
+  for (const level of levelsToLoad) {
+    let loadedForLevel = false;
 
-      if (Array.isArray(json.block)) {
-        blockRules.push(...json.block);
-      }
-    } catch (e) {
-      console.error("Erro ao carregar regras:", file, e);
+    for (const lang of languages) {
+      const url = `${BASE_RULES_URL}${level}/${lang}.json`;
+
+      try {
+        const res = await fetch(url);
+        if (!res.ok) continue;
+
+        const json = await res.json();
+
+        if (Array.isArray(json.rules)) {
+          replaceRules.push(...json.rules);
+        }
+
+        if (Array.isArray(json.block)) {
+          blockRules.push(...json.block);
+        }
+
+        loadedForLevel = true;
+        break; // idioma encontrado → não tenta outros
+      } catch (_) {}
     }
+
+    // se não achou idioma para esse nível, apenas ignora
   }
 
   replaceRules.sort((a, b) => b.from.length - a.from.length);
@@ -123,6 +141,26 @@ function applyBuddhaMode(textNode) {
       post.style.display = "none";
     }
   }
+}
+
+
+/***********************
+ * GET BROWSER LANGUAGE
+ ***********************/
+function getBrowserLanguage() {
+  return navigator.language || "en-US";
+}
+
+function getLanguageFallbacks() {
+  const lang = getBrowserLanguage(); // pt-BR
+  const base = lang.split("-")[0];   // pt
+
+  return [
+    lang,
+    base,
+    "en-US",
+    "en"
+  ];
 }
 
 /***********************
