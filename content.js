@@ -1,7 +1,8 @@
 /***********************
  * CONFIGURAÇÃO
  ***********************/
-const ACTIVE_LEVEL = "lvl2"; // lvl1 | lvl2 | lvl3 | buddha
+let ACTIVE_LEVEL = "lvl1"; // lvl1 | lvl2 | lvl3 | buddha
+let BLUR_MODE = false;
 
 const BASE_RULES_URL =
   "https://raw.githubusercontent.com/SEU_USUARIO/SEU_REPO/main/rules/";
@@ -23,29 +24,29 @@ let blockRules = [];
  * LOAD RULES
  ***********************/
 async function loadRules() {
-  const files = LEVEL_FILES[ACTIVE_LEVEL];
-  if (!files) return;
+  return new Promise(resolve => {
+    chrome.storage.sync.get(["level"], async ({ level }) => {
+      ACTIVE_LEVEL = level || "lvl1";
+      BLUR_MODE = ACTIVE_LEVEL === "buddha";
 
-  for (const file of files) {
-    try {
-      const res = await fetch(BASE_RULES_URL + file);
-      const json = await res.json();
+      const files = LEVEL_FILES[ACTIVE_LEVEL];
+      replaceRules = [];
+      blockRules = [];
 
-      if (Array.isArray(json.rules)) {
-        replaceRules.push(...json.rules);
+      for (const file of files) {
+        const res = await fetch(BASE_RULES_URL + file);
+        const json = await res.json();
+
+        if (json.rules) replaceRules.push(...json.rules);
+        if (json.block) blockRules.push(...json.block);
       }
 
-      if (Array.isArray(json.block)) {
-        blockRules.push(...json.block);
-      }
-    } catch (e) {
-      console.error("Erro ao carregar", file, e);
-    }
-  }
-
-  // prioriza frases maiores
-  replaceRules.sort((a, b) => b.from.length - a.from.length);
+      replaceRules.sort((a, b) => b.from.length - a.from.length);
+      resolve();
+    });
+  });
 }
+
 
 /***********************
  * TEXT SOFTENING
@@ -69,6 +70,17 @@ function softenText(text) {
   return result;
 }
 
+
+
+/***********************
+ * MODO BLUR
+ ***********************/
+function blurPost(post) {
+  post.style.filter = "blur(8px)";
+  post.style.pointerEvents = "none";
+}
+
+
 /***********************
  * BUDDHA MODE
  ***********************/
@@ -89,7 +101,11 @@ function hidePostIfNeeded(textNode) {
     );
 
     if (post) {
-      post.style.display = "none";
+      if (BLUR_MODE) {
+        blurPost(post);
+      } else {
+        post.style.display = "none";
+      }
     }
   }
 }
