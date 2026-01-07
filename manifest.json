@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Healthy Language Filter",
+  "version": "0.2.0",
+  "description": "Suaviza linguagem negativa e oculta conteúdos sensíveis em níveis configuráveis",
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.facebook.com/*",
+        "*://*.x.com/*",
+        "*://*.twitter.com/*",
+        "*://*.instagram.com/*",
+        "*://*.news.google.com/*",
+        "*://*.uol.com.br/*",
+        "*://*.g1.globo.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "host_permissions": [
+    "https://raw.githubusercontent.com/*"
+  ]
+}
