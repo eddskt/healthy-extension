@@ -6,7 +6,7 @@ const DEFAULT_LEVEL = "lvl1"; // lvl1 | lvl2 | lvl3 | buddha
 //let BLUR_MODE = false;
 
 const BASE_RULES_URL =
-  "https://raw.githubusercontent.com/eddskt/healthy-extension/refs/heads/main/rules/";
+  "https://raw.githubusercontent.com/eddskt/healthy-extension/main/rules/";
 
 const LEVEL_FILES = {
   lvl1: ["lvl1.json"],

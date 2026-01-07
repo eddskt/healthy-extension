@@ -5,15 +5,7 @@
   "description": "Suaviza linguagem negativa e oculta conteúdos sensíveis em níveis configuráveis",
   "content_scripts": [
     {
-      "matches": [
-        "*://*.facebook.com/*",
-        "*://*.x.com/*",
-        "*://*.twitter.com/*",
-        "*://*.instagram.com/*",
-        "*://*.news.google.com/*",
-        "*://*.uol.com.br/*",
-        "*://*.g1.globo.com/*"
-      ],
+      "matches": ["<all_urls>"],
       "js": ["content.js"],
       "run_at": "document_idle"
     }
@@ -23,5 +15,9 @@
   ],
   "permissions": [
     "storage"
-  ]
+  ],
+  "action": {
+    "default_title": "Healthy Language Filter",
+    "default_popup": "popup.html"
+  }
 }
