@@ -1,0 +1,7 @@
+{
+  "level": 3,
+  "rules": [
+    { "from": "massacre", "to": "evento de violência extrema" },
+    { "from": "execução", "to": "morte aplicada pelo estado" }
+  ]
+}

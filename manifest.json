@@ -20,5 +20,8 @@
   ],
   "host_permissions": [
     "https://raw.githubusercontent.com/*"
+  ],
+  "permissions": [
+    "storage"
   ]
 }
