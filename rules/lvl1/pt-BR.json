@@ -1,0 +1,7 @@
+{
+  "level": 1,
+  "rules": [
+    { "from": "morte", "to": "falecimento" },
+    { "from": "guerra", "to": "conflito" }
+  ]
+}
