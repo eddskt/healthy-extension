@@ -139,6 +139,7 @@ function containsBlockedWords(text) {
 
 function applyBuddhaMode(textNode) {
   if (!blockRules.length) return;
+  if (isEditable(textNode)) return;
 
   if (containsBlockedWords(textNode.nodeValue)) {
     const post = textNode.parentElement?.closest(
@@ -150,6 +151,7 @@ function applyBuddhaMode(textNode) {
     if (BLUR_MODE) {
       post.style.filter = "blur(8px)";
       post.style.pointerEvents = "none";
+      post.setAttribute("data-buddha-blur", "true");
     } else {
       post.style.display = "none";
     }
