@@ -3,6 +3,9 @@
   "name": "Healthy Language Filter",
   "version": "0.2.0",
   "description": "Suaviza linguagem negativa e oculta conteúdos sensíveis em níveis configuráveis",
+  "background": {
+    "service_worker": "background.js"
+  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

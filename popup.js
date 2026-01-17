@@ -17,3 +17,30 @@ cards.forEach(card => {
     });
   });
 });
+
+function loadStats() {
+  chrome.storage.sync.get(
+    ["totalBlockedPosts", "totalBlurredPosts", "totalReplacedTexts"],
+    data => {
+      document.getElementById("blocked").textContent =
+        data.totalBlockedPosts || 0;
+
+      document.getElementById("blurred").textContent =
+        data.totalBlurredPosts || 0;
+
+      document.getElementById("replaced").textContent =
+        data.totalReplacedTexts || 0;
+    }
+  );
+}
+
+document.addEventListener("DOMContentLoaded", loadStats);
+
+
+document.getElementById("resetStats")?.addEventListener("click", () => {
+  chrome.storage.sync.set({
+    totalBlockedPosts: 0,
+    totalBlurredPosts: 0,
+    totalReplacedTexts: 0
+  }, loadStats);
+});
