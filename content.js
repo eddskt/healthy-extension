@@ -15,6 +15,19 @@ const LEVEL_FILES = {
   buddha: ["lvl1.json", "lvl2.json", "lvl3.json", "buddha.json"]
 };
 
+/* BUG CORREÇÃO PARA INPUTS E TEXTAREAS */
+
+function isEditable(node) {
+  const el = node.parentElement;
+  if (!el) return false;
+
+  return (
+    el.isContentEditable ||
+    el.closest("[contenteditable='true']") ||
+    ["INPUT", "TEXTAREA"].includes(el.tagName)
+  );
+}
+
 /***********************
  * STATE
  ***********************/
@@ -175,10 +188,13 @@ function walk(root) {
         const parent = node.parentElement;
         if (!parent) return NodeFilter.FILTER_REJECT;
 
+        // IGNORA campos de edição
+        if (isEditable(node)) {
+          return NodeFilter.FILTER_REJECT;
+        }
+
         if (
-          ["SCRIPT", "STYLE", "NOSCRIPT", "INPUT", "TEXTAREA"].includes(
-            parent.tagName
-          )
+          ["SCRIPT", "STYLE", "NOSCRIPT"].includes(parent.tagName)
         ) {
           return NodeFilter.FILTER_REJECT;
         }
